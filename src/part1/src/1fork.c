@@ -12,7 +12,6 @@ int sig_action_function(int sig, siginfo_t *info, void *ptr)
 {
   union sigval value = info->si_value;
   printf("Got a signal from %d. Max: %d\n", info->si_pid, (int*) value.sival_ptr);
-  return (int*) value.sival_ptr;
 }
 
 int main()
@@ -110,8 +109,6 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
    			{	
    				int max1 = max_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
    				printf("Max: %d\n", max1);
-   				int max3 = sig_action_function;
-   				printf("Max3: %d\n",max3);
    			}
    			else if(counter == 1)
    			{	
