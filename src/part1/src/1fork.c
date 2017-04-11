@@ -6,11 +6,13 @@
 #include <sys/types.h>
 #include <math.h>
 
+int counter = 0;
 
-void sig_action_function(int sig, siginfo_t *info, void *ptr)
+int sig_action_function(int sig, siginfo_t *info, void *ptr)
 {
   union sigval value = info->si_value;
   printf("Got a signal from %d. Max: %d\n", info->si_pid, (int*) value.sival_ptr);
+  return (int*) value.sival_ptr;
 }
 
 int main()
@@ -71,7 +73,7 @@ int main()
    		else if(pid == 0){
 
    			//printf ("Hi I'm process %d and my parent is %d.\n", getpid (), getppid ());
-   			newFork2(0, 1, data, data_size);
+   			newFork2(0, 1, data, data_size, data_per_process, i);
    			wait(NULL);
    			//int maxVal = max_of_array(data_size,data);
    			//value.sival_ptr = maxVal;
@@ -86,21 +88,68 @@ int main()
 
 }
 
-void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size)
+void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_per_process, int counter)
 {
+	struct sigaction max;
+	memset (&max, '\0', sizeof(max));
+	max.sa_sigaction = sig_action_function;
+	max.sa_flags = SA_SIGINFO;
+	union sigval maxValue;
+	sigaction(40, &max, 0);
 
 	if(i >= n) { return 0; }
 	pid_t pid = fork();
+
 	if(pid > 0){
-		printf ("Hi1 I'm process %d and my parent is %d.\n", getpid (), getppid ());
+		wait(NULL);
 		pid_t pid2= fork();
-		if(pid2 == 0)
+		if(pid2 > 0){
+			wait(NULL);
+			printf ("Hi1 I'm process %d and my parent is %d.\n", getpid (), getppid ());
+			if(counter == 0)
+   			{	
+   				int max1 = max_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
+   				printf("Max: %d\n", max1);
+   				int max3 = sig_action_function;
+   				printf("Max3: %d\n",max3);
+   			}
+   			else if(counter == 1)
+   			{	
+   			int max1 = max_of_array((counter+4)*data_per_process+1,((counter+5)*data_per_process)-2 ,data);
+   			printf("Max: %d\n", max1);
+   			}
+		}
+		else if(pid2 == 0)
 		{
 			printf ("Hi2 I'm process %d and my parent is %d.\n", getpid (), getppid ());
+			if(counter == 0)
+   			{	
+   				int max1 = max_of_array((counter+1)*data_per_process+1,(counter+2)*data_per_process, data);
+   				printf("Max: %d\n", max1);
+   			}
+   			else if(counter == 1)
+   			{	
+   			int max1 = max_of_array((counter+3)*data_per_process+1,(counter+4)*data_per_process, data);
+   			printf("Max: %d\n", max1);
+   			}
 		}
+		
    	}
    	else if(pid == 0){
    		printf ("Hi3 I'm process %d and my parent is %d.\n", getpid (), getppid ());
+   		if(counter == 0)
+   		{	
+   			int max1 = max_of_array(counter*data_per_process,(counter+1)*data_per_process, data);
+   			printf("Max: %d\n", max1);
+   			maxValue.sival_ptr = max1;
+   			sigqueue(getppid(), 40, maxValue);
+   		}
+      	else if(counter == 1)
+   		{	
+   			int max1 = max_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
+   			printf("Max: %d\n", max1);
+   		}
+   		
 
     }
    	else{
@@ -108,7 +157,6 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size)
    		return 0;
    	}
 }
-
 int32_t write_random_nums(int32_t n, FILE * f)
 {
 
@@ -122,7 +170,7 @@ int32_t write_random_nums(int32_t n, FILE * f)
 
 	for (int count = 0; count < n; count++)
 	{
-		fprintf(f, "%d\n", (rand() % 1000));
+		fprintf(f, "%d\n", (rand() % 100));
 	}
 
 	result = fclose(f);
@@ -148,11 +196,11 @@ int32_t read_file(int32_t n, int32_t data[], FILE * f)
 
 	return result;
 }
-int32_t max_of_array(int32_t n, int32_t data[])
+int32_t max_of_array(int32_t first, int32_t last, int32_t data[])
 {
-	int max = data[0];
+	int max = data[first];
 
-	for (int i = 1; i < n; i++)
+	for (int i = first; i < last; i++)
 	{
 		if (max < data[i]) { max = data[i]; }
 	}
