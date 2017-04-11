@@ -1,6 +1,3 @@
-//mypthread.c
-//Christina Segerholm cms549
-//Athira Haridas ah671
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
 
@@ -8,14 +5,26 @@
 #include <stdio.h>      
 #include <stdlib.h>
 #include <errno.h>
+#include <stdint.h>
 
-struct threadNode; //defined in .c class
+//struct threadNode; //defined in .c class
+enum QUEUE_STATUS { RUNNING, IDLE, TERMINATED, BLOCKED, FAILURE, FINISHED };
 
-typedef struct{
-    //Thread ID
-    short tid;
-    //Pointer to thread node 
-    struct threadNode * mynode;
+typedef struct RNPNode_t
+{
+    /** Ready queue ID **/
+    uint16_t ready_id;
+    uint64_t exec_time;
+    ucontext_t ucontext;
+    struct RNPNode_t * next;
+    enum QUEUE_STATUS tstate;
+} RNPNode_t;
+
+typedef struct mypthread_t 
+{
+    //External thread ID
+    uint16_t tid;
+    RNPNode_t node;
 } mypthread_t;
 
 typedef struct {
@@ -30,6 +39,13 @@ void mypthread_exit(void *retval);
 int mypthread_yield(void);
 
 int mypthread_join(mypthread_t thread, void **retval);
+
+void mypthread_set_status(mypthread_t *thread, enum QUEUE_STATUS state);
+
+void mypthread_scheduler_init();
+
+void mypthread_scheduler_push(mypthread_t *thread);
+
 
 
 /* Don't touch anything after this line.
