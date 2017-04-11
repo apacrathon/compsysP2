@@ -6,28 +6,7 @@
 #include <sys/types.h>
 #include <math.h>
 
-void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size)
-{
 
-	if(i >= n) { return 0; }
-	pid_t pid = fork();
-	if(pid > 0){
-		printf ("Hi I'm process %d and my parent is %d.\n", getpid (), getppid ());
-		pid_t pid2= fork();
-		if(pid2 == 0)
-		{
-			printf ("Hi I'm process %d and my parent is %d.\n", getpid (), getppid ());
-		}
-   	}
-   	else if(pid == 0){
-   		printf ("Hi I'm process %d and my parent is %d.\n", getpid (), getppid ());
-
-    }
-   	else{
-   		printf("Fork Failed\n");
-   		return 0;
-   	}
-}
 void sig_action_function(int sig, siginfo_t *info, void *ptr)
 {
   union sigval value = info->si_value;
@@ -106,6 +85,30 @@ int main()
    	}	
 
 }
+
+void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size)
+{
+
+	if(i >= n) { return 0; }
+	pid_t pid = fork();
+	if(pid > 0){
+		printf ("Hi1 I'm process %d and my parent is %d.\n", getpid (), getppid ());
+		pid_t pid2= fork();
+		if(pid2 == 0)
+		{
+			printf ("Hi2 I'm process %d and my parent is %d.\n", getpid (), getppid ());
+		}
+   	}
+   	else if(pid == 0){
+   		printf ("Hi3 I'm process %d and my parent is %d.\n", getpid (), getppid ());
+
+    }
+   	else{
+   		printf("Fork Failed\n");
+   		return 0;
+   	}
+}
+
 int32_t write_random_nums(int32_t n, FILE * f)
 {
 
