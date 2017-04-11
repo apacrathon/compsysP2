@@ -16,6 +16,9 @@ int sig_action_function(int sig, siginfo_t *info, void *ptr)
   
   union sigval value = info->si_value;
   //printf("Got a signal from %d. Max: %d\n", info->si_pid, (int*) value.sival_ptr);
+  if(sig == 41){
+  	printf("Nill is a lil bitch\n");
+  }
   if(h2[2] > -1)
   {
   	for(int i = 0; i < 3; i++)
@@ -37,11 +40,7 @@ int sig_action_function(int sig, siginfo_t *info, void *ptr)
   {
   	i = 0;
   }
-  if(sig == 41)
-  {
-  	printf("Hi");
 
-  }
 }
 
 int main()
@@ -96,17 +95,14 @@ int main()
 	{
 		data_per_process = ceil((double)data_size / total_processes);
 	}
-	
+	wait(NULL);
 	for(int i = 0; i < 2; i++)
 	{ 
+		wait(NULL);
 		pid_t pid = fork();
-
-		if(pid > 0){
+		wait(NULL);
+		if(pid ==  0){
 			wait(NULL);
-   		
-   		}
-   		else if(pid == 0){
-   			wait(NULL);
    			//printf ("Hi I'm process %d and my parent is %d.\n", getpid (), getppid ());
    			newFork2(0, 1, data, data_size, data_per_process, i);
    			wait(NULL);
@@ -114,12 +110,19 @@ int main()
    			//value.sival_ptr = maxVal;
    			//sigqueue(getppid(), 40, value);
     		exit(0);
+			
+   		}
+   		else if(pid > 0){
+   			
+
+			printf ("Hi(Main Parent) I'm process %d and my parent is %d.\n", getpid (), getppid ());
+   		
     	}
    		else{
    			printf("Fork Failed\n");
    			return 0;
    		}
-   	}	
+   	}
 
 }
 
@@ -157,8 +160,6 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
 			printf ("Hi1 I'm process %d and my parent is %d.\n", getpid (), getppid ());
 			if(counter == 0)
    			{	
-   	
-
    				int max1 = max_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
    				int min1 = min_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
    				int sum1 = sum_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
@@ -191,9 +192,9 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
    				maxValue.sival_ptr = max1;
    				minValue.sival_ptr = min1;
    				sumValue.sival_ptr = sum1;
-   				sigqueue(getppid(), 41, maxValue);
-   				sigqueue(getppid(), 41, minValue);
-   				sigqueue(getppid(), 41, sumValue);
+   				sigqueue(getpid(), 41, maxValue);
+   				sigqueue(getpid(), 41, minValue);
+   				sigqueue(getpid(), 41, sumValue);
    				
    			}
    			else if(counter == 1)
