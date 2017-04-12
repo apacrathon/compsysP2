@@ -247,7 +247,7 @@ int partd(int array[],int index1, int index2)
     else if (getpid()==child[2])
     {
         signal(SIGINT, SIG_IGN);
-        sleep(NULL);
+        sleep(1);
         printf("press Ctrl-C! 5 Seconds Remaining\n");
         sleep(9);
         
