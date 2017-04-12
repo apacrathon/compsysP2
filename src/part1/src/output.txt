@@ -436,3 +436,340 @@ Hi I'm process 25800 and my parent is 25799
 Max = 93
 Min = 11
 Sum = 1612
+Hi I'm process 14179 and my parent is 14178
+Hi I'm process 14180 and my parent is 14178
+Hi I'm process 14178 and my parent is 14176
+Hi I'm process 14182 and my parent is 14177
+Hi I'm process 14181 and my parent is 14177
+Hi I'm process 14177 and my parent is 14176
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 14294 and my parent is 14292
+Hi I'm process 14293 and my parent is 14292
+Hi I'm process 14292 and my parent is 14290
+Hi I'm process 14296 and my parent is 14291
+Hi I'm process 14295 and my parent is 14291
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 14291 and my parent is 14290
+Hi I'm process 14347 and my parent is 14345
+Hi I'm process 14346 and my parent is 14345
+Hi I'm process 14345 and my parent is 14343
+Hi I'm process 14349 and my parent is 14344
+Hi I'm process 14348 and my parent is 14344
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 14344 and my parent is 14343
+Hi I'm process 14511 and my parent is 14509
+Hi I'm process 14510 and my parent is 14509
+Hi I'm process 14513 and my parent is 14508
+Hi I'm process 14512 and my parent is 14508
+Hi I'm process 14508 and my parent is 14507
+Hi I'm process 14509 and my parent is 14507
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 14800 and my parent is 14798
+Hi I'm process 14799 and my parent is 14798
+Hi I'm process 14802 and my parent is 14797
+Hi I'm process 14801 and my parent is 14797
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 14797 and my parent is 14796
+Hi I'm process 14798 and my parent is 14796
+Hi I'm process 14840 and my parent is 14838
+Hi I'm process 14839 and my parent is 14838
+Hi I'm process 14842 and my parent is 14837
+Hi I'm process 14841 and my parent is 14837
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 14837 and my parent is 14836
+Hi I'm process 14838 and my parent is 14836
+Hi I'm process 14875 and my parent is 14873
+Hi I'm process 14877 and my parent is 14872
+Hi I'm process 14876 and my parent is 14872
+Hi I'm process 14872 and my parent is 14871
+Hi I'm process 14874 and my parent is 14873
+Hi I'm process 14873 and my parent is 14871
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15274 and my parent is 15272
+Hi I'm process 15273 and my parent is 15272
+Hi I'm process 15272 and my parent is 15270
+Hi I'm process 15276 and my parent is 15271
+Hi I'm process 15275 and my parent is 15271
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15271 and my parent is 15270
+Hi I'm process 15504 and my parent is 15502
+Hi I'm process 15503 and my parent is 15502
+Hi I'm process 15502 and my parent is 15500
+Hi I'm process 15506 and my parent is 15501
+Hi I'm process 15505 and my parent is 15501
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15501 and my parent is 15500
+Hi I'm process 15537 and my parent is 15535
+Hi I'm process 15536 and my parent is 15535
+Hi I'm process 15535 and my parent is 15533
+Hi I'm process 15539 and my parent is 15534
+Hi I'm process 15538 and my parent is 15534
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15534 and my parent is 15533
+Hi I'm process 15600 and my parent is 15598
+Hi I'm process 15599 and my parent is 15598
+Hi I'm process 15598 and my parent is 15596
+Hi I'm process 15602 and my parent is 15597
+Hi I'm process 15601 and my parent is 15597
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15597 and my parent is 15596
+Hi I'm process 15749 and my parent is 15747
+Hi I'm process 15748 and my parent is 15747
+Hi I'm process 15747 and my parent is 15745
+Hi I'm process 15751 and my parent is 15746
+Hi I'm process 15750 and my parent is 15746
+Hi I'm process 15746 and my parent is 15745
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15808 and my parent is 15806
+Hi I'm process 15807 and my parent is 15806
+Hi I'm process 15806 and my parent is 15804
+Hi I'm process 15810 and my parent is 15805
+Hi I'm process 15809 and my parent is 15805
+Hi I'm process 15805 and my parent is 15804
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15825 and my parent is 15823
+Hi I'm process 15824 and my parent is 15823
+Hi I'm process 15823 and my parent is 15821
+Hi I'm process 15827 and my parent is 15822
+Hi I'm process 15826 and my parent is 15822
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15822 and my parent is 15821
+Hi I'm process 15841 and my parent is 15839
+Hi I'm process 15840 and my parent is 15839
+Hi I'm process 15839 and my parent is 15837
+Hi I'm process 15843 and my parent is 15838
+Hi I'm process 15842 and my parent is 15838
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15838 and my parent is 15837
+Hi I'm process 15856 and my parent is 15854
+Hi I'm process 15855 and my parent is 15854
+Hi I'm process 15854 and my parent is 15852
+Hi I'm process 15858 and my parent is 15853
+Hi I'm process 15857 and my parent is 15853
+Hi I'm process 15853 and my parent is 15852
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15870 and my parent is 15868
+Hi I'm process 15869 and my parent is 15868
+Hi I'm process 15868 and my parent is 15866
+Hi I'm process 15872 and my parent is 15867
+Hi I'm process 15871 and my parent is 15867
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15867 and my parent is 15866
+Hi I'm process 15896 and my parent is 15894
+Hi I'm process 15895 and my parent is 15894
+Hi I'm process 15894 and my parent is 15892
+Hi I'm process 15898 and my parent is 15893
+Hi I'm process 15897 and my parent is 15893
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 15893 and my parent is 15892
+Hi I'm process 15915 and my parent is 15913
+Hi I'm process 15913 and my parent is 15911
+Hi I'm process 15914 and my parent is 15913
+Hi I'm process 17084 and my parent is 17082
+Hi I'm process 17083 and my parent is 17082
+Hi I'm process 17082 and my parent is 17080
+Hi I'm process 17086 and my parent is 17081
+Hi I'm process 17085 and my parent is 17081
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 17081 and my parent is 17080
+Hi I'm process 17406 and my parent is 17404
+Hi I'm process 17405 and my parent is 17404
+Hi I'm process 17404 and my parent is 17402
+Hi I'm process 17408 and my parent is 17403
+Hi I'm process 17407 and my parent is 17403
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 17403 and my parent is 17402
+Hi I'm process 17914 and my parent is 17912
+Hi I'm process 17913 and my parent is 17912
+Hi I'm process 17912 and my parent is 17910
+Hi I'm process 17916 and my parent is 17911
+Hi I'm process 17915 and my parent is 17911
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 17911 and my parent is 17910
+Hi I'm process 17999 and my parent is 17997
+Hi I'm process 17998 and my parent is 17997
+Hi I'm process 17997 and my parent is 17995
+Max = 92
+Min = -1
+Sum = 869
+Hi I'm process 18001 and my parent is 16208
+Hi I'm process 19262 and my parent is 19260
+Hi I'm process 19260 and my parent is 19258
+Hi I'm process 19261 and my parent is 18272
+Hi I'm process 20376 and my parent is 20374
+Hi I'm process 20375 and my parent is 20374
+Hi I'm process 20374 and my parent is 20372
+Hi I'm process 20378 and my parent is 20373
+Hi I'm process 20377 and my parent is 20373
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 20373 and my parent is 20372
+Hi I'm process 20571 and my parent is 20569
+Hi I'm process 20570 and my parent is 20569
+Hi I'm process 20569 and my parent is 20567
+Hi I'm process 20573 and my parent is 20568
+Hi I'm process 20572 and my parent is 20568
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 20568 and my parent is 20567
+Hi I'm process 20700 and my parent is 20698
+Hi I'm process 20699 and my parent is 20698
+Hi I'm process 20698 and my parent is 20696
+Max = 92
+Min = -1
+Sum = 869
+Hi I'm process 20797 and my parent is 20795
+Hi I'm process 20796 and my parent is 20795
+Hi I'm process 20795 and my parent is 20793
+Max = 92
+Min = -1
+Sum = 869
+Hi I'm process 21070 and my parent is 21068
+Hi I'm process 21069 and my parent is 21068
+Hi I'm process 21068 and my parent is 21066
+Max = 92
+Min = -1
+Sum = 869
+Hi I'm process 21130 and my parent is 21128
+Hi I'm process 21129 and my parent is 21128
+Hi I'm process 21128 and my parent is 21126
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 21226 and my parent is 21224
+Hi I'm process 21225 and my parent is 21224
+Hi I'm process 21224 and my parent is 21222
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 21250 and my parent is 21248
+Hi I'm process 21249 and my parent is 21248
+Hi I'm process 21248 and my parent is 21246
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 21508 and my parent is 21506
+Hi I'm process 21507 and my parent is 21506
+Hi I'm process 21506 and my parent is 21504
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 21510 and my parent is 19556
+Hi I'm process 22691 and my parent is 22689
+Hi I'm process 22690 and my parent is 22689
+Hi I'm process 22689 and my parent is 22687
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 22798 and my parent is 22796
+Hi I'm process 22797 and my parent is 22796
+Hi I'm process 22796 and my parent is 22794
+Hi I'm process 22800 and my parent is 22795
+Hi I'm process 22799 and my parent is 22795
+Hi I'm process 22795 and my parent is 22794
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 23225 and my parent is 23223
+Hi I'm process 23223 and my parent is 23221
+Hi I'm process 23224 and my parent is 21783
+Hi I'm process 24352 and my parent is 24350
+Hi I'm process 24351 and my parent is 24350
+Hi I'm process 24350 and my parent is 24348
+Hi I'm process 24354 and my parent is 24349
+Hi I'm process 24353 and my parent is 24349
+Hi I'm process 24349 and my parent is 24348
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 24433 and my parent is 24431
+Hi I'm process 24432 and my parent is 24431
+Hi I'm process 24431 and my parent is 24429
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 24435 and my parent is 23591
+Hi I'm process 24434 and my parent is 23591
+Hi I'm process 24535 and my parent is 24533
+Hi I'm process 24534 and my parent is 24533
+Hi I'm process 24533 and my parent is 24531
+Hi I'm process 24537 and my parent is 23591
+Hi I'm process 24536 and my parent is 23591
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 24603 and my parent is 24601
+Hi I'm process 24602 and my parent is 24601
+Hi I'm process 24601 and my parent is 24599
+Hi I'm process 24605 and my parent is 24600
+Hi I'm process 24604 and my parent is 24600
+Hi I'm process 24600 and my parent is 24599
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 24642 and my parent is 24640
+Hi I'm process 24641 and my parent is 24640
+Hi I'm process 24640 and my parent is 24638
+Hi I'm process 24644 and my parent is 23591
+Hi I'm process 24643 and my parent is 23591
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 24736 and my parent is 24734
+Hi I'm process 24735 and my parent is 24734
+Hi I'm process 24734 and my parent is 24732
+Hi I'm process 24738 and my parent is 23591
+Hi I'm process 24737 and my parent is 23591
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 24860 and my parent is 24858
+Hi I'm process 24859 and my parent is 24858
+Hi I'm process 24858 and my parent is 24856
+Max = 92
+Min = 11
+Sum = 869
