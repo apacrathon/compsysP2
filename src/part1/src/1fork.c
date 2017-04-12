@@ -6,378 +6,372 @@
 #include <sys/types.h>
 #include <math.h>
 
-int counter = 0;
 int h[3]; 
 int h2[3];
-int final[3]; 
+//int final[3]; 
 int i =0;
+//signal handler
 int sig_action_function(int sig, siginfo_t *info, void *ptr)
 {
   
   union sigval value = info->si_value;
   //printf("Got a signal from %d. Max: %d\n", info->si_pid, (int*) value.sival_ptr);
-   if(sig == 41){
- 	final[i] = (int*) value.sival_ptr;
-   }
- else if(h2[2] > -1)
+   // if(sig == 41){
+   //  final[i] = (int*) value.sival_ptr;
+   //  printf("final: %d\n",final[i]);
+   // }
+ if(h2[2] > -1)
   {
-  	for(int i = 0; i < 3; i++)
-	{
-		h[i] = -1;
-		h2[i] = -1;
-	}
+    for(int i = 0; i < 3; i++)
+    {
+        h[i] = -1;
+        h2[i] = -1;
+    }
   }
   else if(h[2] > -1)
   {
-  	h2[i] = (int*) value.sival_ptr;
+    h2[i] = (int*) value.sival_ptr;
   }
   else {
-  	h[i] = (int*) value.sival_ptr;
+    h[i] = (int*) value.sival_ptr;
   }
   
   i++;
   if(i>2)
   {
-  	i = 0;
+    i = 0;
   }
-
 }
 
-int main()
+int max_function(int array[], int first, int last)
 {
-	for(int i = 0; i < 3; i++)
-	{
-		final[i] = -1;
-		h[i] = -1;
-		h2[i] = -1;
-	}
-	srand(time(NULL));
-
-	//FILE * f_write = fopen("random.txt", "w");
-	FILE * f_read = fopen("random.txt", "r");
-	int32_t data_size = 100, data[data_size], total_processes = 6;
-
-	// printf("\nWriting to file...\n");
-	// write_random_nums(data_size, f_write);
-	// printf("Successfully wrote to file...\n");
-
-	printf("Reading from file...\n");
-	read_file(data_size, data, f_read);
-	printf("Successfully read from file...\n");
-
-	struct sigaction max;
-	memset (&max, '\0', sizeof(max));
-	max.sa_sigaction = sig_action_function;
-	max.sa_flags = SA_SIGINFO;
-	union sigval maxValue;
-	sigaction(40, &max, 0);
-
-	struct sigaction min;
-	memset(&min, '\0', sizeof(min));
-	min.sa_sigaction = sig_action_function;
-	min.sa_flags = SA_SIGINFO;
-	union sigval minValue;
-	sigaction(41, &min, 0);
-
-	struct sigaction sum;
-	memset(&sum, '\0', sizeof(sum));
-	sum.sa_sigaction = sig_action_function;
-	sum.sa_flags = SA_SIGINFO;
-	union sigval sumValue;
-	sigaction(42, &sum, 0);
-
-	int data_per_process;
-	if (data_size <= 10)
-	{
-		data_per_process = 1;
-	}
-	else
-	{
-		data_per_process = ceil((double)data_size / total_processes);
-	}
-	wait(NULL);
-	for(int i = 0; i < 2; i++)
-	{ 
-		pid_t pid = fork();
-		if(pid ==  0){
-			wait(NULL);
-   			//printf ("Hi I'm process %d and my parent is %d.\n", getpid (), getppid ());
-   			newFork2(0, 1, data, data_size, data_per_process, i);
-   			//int maxVal = max_of_array(data_size,data);
-   			//value.sival_ptr = maxVal;
-   			//sigqueue(getppid(), 40, value);
-    		exit(0);
-			
-   		}
-   		else if(pid > 0){
-   			wait(NULL);
-
-			printf ("Hi(Main Parent) I'm process %d and my parent is %d.\n", getpid (), getppid ());
-   			if(i==1)
-   			{
-   				int max1 = final[0];
-   				int min1 = final[1];
-   				int sum1 = final[2];
-
-   				if(max1<h[0])
-   					max1 = h[0];
-   				
-   				if(min1>h[1])
-   					min1 = h[1];
-   				sum1 = sum1+h[2];
-   				printf("Final\nMax: %d\nMin: %d\nSum: %d\n",max1,min1,sum1);
-   			}
-    	}
-   		else{
-   			printf("Fork Failed\n");
-   			return 0;
-   		}
-   	}
-
+    int maximum = array[first];
+    for(int i = first;i<=last;i++)
+    {
+        if(array[i]>maximum)
+            maximum = array[i];
+    }
+    return maximum;
 }
 
-void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_per_process, int counter)
+int min_function(int array[], int first, int last)
 {
-	struct sigaction max;
-	memset (&max, '\0', sizeof(max));
-	max.sa_sigaction = sig_action_function;
-	max.sa_flags = SA_SIGINFO;
-	union sigval maxValue;
-	sigaction(40, &max, 0);
+    int minimum = array[first];
+    for(int i = first;i<=last;i++)
+    {
+        if(array[i]<minimum)
+            minimum = array[i];
+    }
+    return minimum;
+}
 
-	struct sigaction min;
-	memset(&min, '\0', sizeof(min));
-	min.sa_sigaction = sig_action_function;
-	min.sa_flags = SA_SIGINFO;
-	union sigval minValue;
-	sigaction(41, &min, 0);
+int sum_function(int array[], int first, int last)
+{
+    int summation = 0;
+    for(int i=first;i<=last;i++)
+    {
+        summation += array[i];
+    }
+    return summation;
+}
 
-	struct sigaction sum;
-	memset(&sum, '\0', sizeof(sum));
-	sum.sa_sigaction = sig_action_function;
-	sum.sa_flags = SA_SIGINFO;
-	union sigval sumValue;
-	sigaction(42, &sum, 0);
+int partd(int array[],int index1, int index2)
+{
+    struct sigaction max;
+    memset (&max, '\0', sizeof(max));
+    max.sa_sigaction = sig_action_function;
+    max.sa_flags = SA_SIGINFO;
+    union sigval maxValue;
+    sigaction(40, &max, 0);
 
-	if(i >= n) { return 0; }
-	pid_t pid = fork();
-	wait(NULL);
-	if(pid > 0){
-		wait(NULL);
-		pid_t pid2= fork();
-		wait(NULL);
+    struct sigaction min;
+    memset(&min, '\0', sizeof(min));
+    min.sa_sigaction = sig_action_function;
+    min.sa_flags = SA_SIGINFO;
+    union sigval minValue;
+    sigaction(41, &min, 0);
 
-		if(pid2 > 0){
-			wait(NULL);
-			printf ("Hi1 I'm process %d and my parent is %d.\n", getpid (), getppid ());
-			if(counter == 0)
-   			{	
-   				wait(NULL);
-   				int max1 = max_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
-   				int min1 = min_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
-   				int sum1 = sum_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
+    struct sigaction sum;
+    memset(&sum, '\0', sizeof(sum));
+    sum.sa_sigaction = sig_action_function;
+    sum.sa_flags = SA_SIGINFO;
+    union sigval sumValue;
+    sigaction(42, &sum, 0);
 
-   				printf("Max: %d\n", max1);
-   				wait(NULL);
-   				for(int k =0; k< 3; k++)
-   				{
-   					printf("H: %d\n", h[k]);
-   					printf("H2: %d\n", h2[k]);
-   					// if(h[k] > max1){
-   					// 	max1 = h[k];
-   					// }
-   				}
-   				if(max1<h[0])
-   					max1 = h[0];
-   				
+    FILE *f = fopen("output.txt","ab");
+if (f == NULL)
+{
+    printf("Can't open file\n");    
+    exit(-1);
+}
+    int beginning=index1;
+    int end=index2;
+    int gap= ceil((end-beginning)/6);
+    int child[6];
+    pid_t pid=getpid();
+    //creating 6 pipes to communicate with parent/child
+    int maxd;
+    int mind;
+    int sumd;
+    // spawning the children
+        pid=fork();
+        if (pid==0)
+      {
+            child[0]=getpid();
+            pid=fork();
+            if (pid==0)
+            {
+                child[2]=getpid();
+                
+            }
+            else
+            {
+             pid=fork();
+             if (pid==0)
+                {
+                child[3]=getpid();
+                
+                }
+            }
+        }
+        else if (pid>0)
+            {
+                pid=fork();
+                if (pid==0)
+                {
+                    child[1]=getpid();
+                    pid=fork();
+                    if (pid==0)
+                    {
+                        child[4]=getpid();        
+                 }
+                 else
+               {pid=fork();
+                 if (pid==0)
+                {
+                 child[5]=getpid();
+                }    
 
-   				if(min1>h[1])
-   					min1 = h[1];
-   				
+                }
+          }
+      }
 
-   				if(max1<h2[0])
-   					max1 = h2[0];
+        //child 1
+     if (getpid()==child[0])
+    { 
+        
 
-   				if(min1>h2[1])
-   					min1 = h2[1];
-   				sum1 = sum1 + h[2] + h2[2];
+        wait(NULL);
+        wait(NULL);
+        printf("Hi1 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
+        maxd = max_function(array,beginning,gap);
+        mind = min_function(array,beginning,gap);
+        sumd = sum_function(array,beginning,gap);
 
-   				maxValue.sival_ptr =(int*) max1;
-   				minValue.sival_ptr =(int*) min1;
-   				sumValue.sival_ptr =(int*) sum1;
-   				sigqueue(getpid(), 41, maxValue);
-   				sigqueue(getpid(), 41, minValue);
-   				sigqueue(getpid(), 41, sumValue);
-   				
-   			}
-   			else if(counter == 1)
-   			{	
-   			int max1 = max_of_array((counter+4)*data_per_process+1,((counter+5)*data_per_process)-2 ,data);
-   			int min1 = min_of_array((counter+4)*data_per_process+1,((counter+5)*data_per_process)-2 ,data);
-   			int sum1 = sum_of_array((counter+4)*data_per_process+1,((counter+5)*data_per_process)-2 ,data);
-   			wait(NULL);
-   			if(max1<h[0])
-   					max1 = h[0];
-   				
+        //compare with child 3 
 
-   				if(min1>h[1])
-   					min1 = h[1];
-   				
-
-   				if(max1<h2[0])
-   					max1 = h2[0];
-
-   				if(min1>h2[1])
-   					min1 = h2[1];
-   				sum1 = sum1 + h[2] + h2[2];
-
-   				maxValue.sival_ptr = (int*) max1;
-   				minValue.sival_ptr = (int*) min1;
-   				sumValue.sival_ptr = (int*) sum1;
-   				sigqueue(getpid(), 40, maxValue);
-   				sigqueue(getpid(), 40, minValue);
-   				sigqueue(getpid(), 40, sumValue);
-   			}
-		}
-		else if(pid2 == 0)
-		{
-			printf ("Hi2 I'm process %d and my parent is %d.\n", getpid (), getppid ());
-			if(counter == 0)
-   			{	
-
-   				int max1 = max_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
-   				int min1 = min_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
-   				int sum1 = sum_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
-   				printf("Max: %d\n Min: %d\n Sum: %d\n", max1, min1, sum1);
-   				maxValue.sival_ptr = (int*) max1;
-   				minValue.sival_ptr = (int*) min1;
-   				sumValue.sival_ptr = (int*) sum1;
-   				 sigqueue(getppid(), 40, maxValue);
-   				 sigqueue(getppid(), 40, minValue);
-   				 sigqueue(getppid(), 40, sumValue);
-   			 }
-   			else if(counter == 1)
-   			{	
-   			int max1 = max_of_array((counter+3)*data_per_process+1,(counter+4)*data_per_process, data);
-   			int min1 = min_of_array((counter+3)*data_per_process+1,(counter+4)*data_per_process, data);
-   			int sum1 = sum_of_array((counter+3)*data_per_process+1,(counter+4)*data_per_process, data);
-				maxValue.sival_ptr = (void*) max1;
-   				minValue.sival_ptr = (void*) min1;
-   				sumValue.sival_ptr = (void*) sum1;
-   				sigqueue(getppid(), 40, maxValue);
-   				sigqueue(getppid(), 40, minValue);
-   				sigqueue(getppid(), 40, sumValue);
-   			 //printf("Max: %d\n", max1);
-   			}
-		}
-		
-   	}
-   	else if(pid == 0){
-   		printf ("Hi3 I'm process %d and my parent is %d.\n", getpid (), getppid ());
-   		if(counter == 0)
-   		{	
-   			int max1 = max_of_array(counter*data_per_process,(counter+1)*data_per_process, data);
-   			int min1 =  min_of_array(counter*data_per_process,(counter+1)*data_per_process, data);
-   			int sum1 =  sum_of_array(counter*data_per_process,(counter+1)*data_per_process, data);
-   			//printf("Max: %d\n Min: %d\n Sum: %d\n", max1, min1, sum1);
-   			maxValue.sival_ptr =(int*) max1;
-   			minValue.sival_ptr =(int*) min1;
-   			sumValue.sival_ptr =(int*) sum1;
-   			// sigqueue(getppid(), 40, maxValue);
-   			// sigqueue(getppid(), 40, minValue);
-   			// sigqueue(getppid(), 40, sumValue);
-   		}
-      	else if(counter == 1)
-   		{	
-   			int max1 = max_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
- 			int min1 = min_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
-   			int sum1 = sum_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
-   			maxValue.sival_ptr =(int*) max1;
-   			minValue.sival_ptr =(int*) min1;
-   			sumValue.sival_ptr =(int*) sum1;
-   		// 	sigqueue(getppid(), 40, maxValue);
-   		// 	sigqueue(getppid(), 40, minValue);
-   		// 	sigqueue(getppid(), 40, sumValue);
-   		 }
-   		
+        if(maxd<h[0])
+            maxd = h[0];
+        if(mind>h[1])
+            mind = h[1];
+        sumd = sumd + h[2];
+        
+        //compare new results with child 4
+        if(maxd<h2[0])
+            maxd = h2[0];
+        if(mind>h2[1])
+            mind = h2[1];
+        sumd = sumd + h2[2];
+    
+                   
+        //write final results to parent
+        maxValue.sival_ptr =(int*) maxd;
+        minValue.sival_ptr =(int*) mind;
+        sumValue.sival_ptr =(int*) sumd;
+        sigqueue(getppid(), 40, maxValue);
+        sigqueue(getppid(), 40, minValue);
+        sigqueue(getppid(), 40, sumValue);
 
     }
-   	else{
-   		printf("Fork Failed\n");
-   		return 0;
-   	}
+    //child 2
+    else if(getpid()==child[1])
+    {
+        
+        wait(NULL);
+        wait(NULL);
+        printf("Hi2 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
+        maxd = max_function(array,gap+1,2*gap);
+        mind = min_function(array,gap+1,2*gap);
+        sumd = sum_function(array,gap+1,2*gap);
+
+        
+        //compare values with child 5
+        if(maxd<h[0])
+            maxd = h[0];
+        if(mind>h[1])
+            mind = h[1];
+        sumd = sumd + h[2];
+        
+        //compare new results with child 6
+        if(maxd<h2[0])
+            maxd = h2[0];
+        if(mind>h2[1])
+            mind = h2[1];
+        sumd = sumd + h2[2];
+        maxValue.sival_ptr =(int*) maxd;
+        minValue.sival_ptr =(int*) mind;
+        sumValue.sival_ptr =(int*) sumd;
+        sigqueue(getppid(), 40, maxValue);
+        sigqueue(getppid(), 40, minValue);
+        sigqueue(getppid(), 40, sumValue);
+    }
+    //child 3
+    else if (getpid()==child[2])
+    {
+        
+        printf("Hi3 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
+        maxd = max_function(array,2*gap+1, 3*gap);
+        mind = min_function(array,2*gap+1, 3*gap);
+        sumd = sum_function(array,2*gap+1, 3*gap);
+        //write results to child 1
+        maxValue.sival_ptr = (int*) maxd;
+        minValue.sival_ptr = (int*) mind;
+        sumValue.sival_ptr = (int*) sumd;
+        sigqueue(getppid(), 40, maxValue);
+        sigqueue(getppid(), 40, minValue);
+        sigqueue(getppid(), 40, sumValue);
+
+        
+    }
+    //child 4
+    else if (getpid()==child[3])
+    {
+        
+        printf("Hi4 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
+        maxd = max_function(array,3*gap+1,4*gap);
+        mind = min_function(array,3*gap+1,4*gap);
+        sumd = sum_function(array,3*gap+1,4*gap);
+        //write results to child 1
+
+        maxValue.sival_ptr = (int*) maxd;
+        minValue.sival_ptr = (int*) mind;
+        sumValue.sival_ptr = (int*) sumd;
+        sigqueue(getppid(), 40, maxValue);
+        sigqueue(getppid(), 40, minValue);
+        sigqueue(getppid(), 40, sumValue);
+    }
+    //child 5
+    else if (getpid()==child[4])
+    {
+        printf("Hi5 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
+        maxd = max_function(array,4*gap+1,5*gap);
+        mind = min_function(array,4*gap+1,5*gap);
+        sumd = sum_function(array,4*gap+1,5*gap);
+        //write results to child 2
+        maxValue.sival_ptr = (int*) maxd;
+        minValue.sival_ptr = (int*) mind;
+        sumValue.sival_ptr = (int*) sumd;
+        sigqueue(getppid(), 40, maxValue);
+        sigqueue(getppid(), 40, minValue);
+        sigqueue(getppid(), 40, sumValue);
+    }
+    //child 6
+    else if (getpid()==child[5])
+    {
+        printf("Hi6 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
+        maxd = max_function(array,5*gap+1,end);
+        mind = min_function(array,5*gap+1,end);
+        sumd = sum_function(array,5*gap+1,end);
+        //write results to child 2
+        maxValue.sival_ptr = (int*) maxd;
+        minValue.sival_ptr = (int*) mind;
+        sumValue.sival_ptr = (int*) sumd;
+        sigqueue(getppid(), 40, maxValue);
+        sigqueue(getppid(), 40, minValue);
+        sigqueue(getppid(), 40, sumValue);
+    }
+    //Parent
+    else
+    {
+//waits for children
+    for (int child=0; child<4;child++)
+    {
+        int status;
+        pid_t pid=wait(&status);
+    }   
+printf("hello im main parent %d\n",getpid());
+int max1;
+int min1;
+int sum1;
+// read max from child 1 and 2
+if(h[0]<h2[0])
+    max1 = h2[0];
+else 
+    max1 = h[0];
+
+
+//display max of array
+printf("Max = %d\n",max1);
+fprintf(f,"Max = %d\n",max1);
+
+
+//compute new min
+if(h[1]<h2[1])
+    min1 = h[1];
+else 
+    min1 = h2[1];
+//display min
+printf("Min = %d\n",min1);
+fprintf(f,"Min = %d\n",min1);
+
+//read sum from child 1 and 2
+sum1 = h[2] + h2[2];
+
+//display computed sum
+printf("Sum = %d\n",sum1);
+fprintf(f,"Sum = %d\n",sum1);
+fclose(f);
+    }
 }
-int32_t write_random_nums(int32_t n, FILE * f)
+
+int main(){
+
+    for(int i = 0; i < 3; i++)
+    {
+        h[i] = -1;
+        h2[i] = -1;
+    }
+
+FILE* nums = fopen("numbers.txt", "r");
+int readnum = 0;
+int counter = 0;
+//scanning file for number of elements
+while(fscanf(nums, "%d,", &readnum) > 0 )
 {
-
-	int32_t result = 0;
-
-	if (f == NULL)
-	{
-	    printf("Error opening file!\n");
-	    exit(1);
-	}
-
-	for (int count = 0; count < n; count++)
-	{
-		fprintf(f, "%d\n", (rand() % 100));
-	}
-
-	result = fclose(f);
-
-	return result;
+    counter++;
 }
-int32_t read_file(int32_t n, int32_t data[], FILE * f)
+fclose(nums);
+//create array with size of elements
+int array[counter];
+
+FILE* num = fopen("numbers.txt", "r");
+int readnums = 0;
+int index = 0;
+//put values of elements into the array
+while(fscanf(num, "%d,", &readnums) > 0 )
 {
-	int32_t result = 0;
-
-	if (f == NULL)
-	{
-	    printf("Error opening file!\n");
-	    return 1;
-	}
-
-	for (int i = 0; i < n; i++)
-	{
-		fscanf(f, "%d", &data[i]);
-	}
-
-	result = fclose(f);
-
-	return result;
+    array[index] = readnums;
+    index++;
 }
-int32_t max_of_array(int32_t first, int32_t last, int32_t data[])
-{
-	int max = data[first];
+fclose(num);
+//run process
+partd(array,0,index-1);
 
-	for (int i = first; i < last; i++)
-	{
-		if (max < data[i]) { max = data[i]; }
-	}
-
-	return max;
+return 0;
 }
-int32_t sum_of_array(int32_t first, int32_t last, int32_t data[])
-{
-	int sum = 0;
-
-	for (int i = first; i < last; i++)
-	{
-		sum += data[i];
-	}
-
-	return sum;
-}
-
-int32_t min_of_array(int32_t first,int32_t last, int32_t data[])
-{
-	int min = data[0];
-
-	for (int i = first; i < last; i++)
-	{
-		if (min > data[i]) { min = data[i]; }
-	}
-
-	return min;
-}
-
