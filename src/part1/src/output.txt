@@ -917,3 +917,9 @@ Hi I'm process 5676 and my parent is 5671
 Max = 92
 Min = 11
 Sum = 869
+Hi I'm process 7286 and my parent is 7284
+Hi I'm process 7285 and my parent is 7284
+Hi I'm process 7284 and my parent is 7282
+Max = 92
+Min = 11
+Sum = 869
