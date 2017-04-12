@@ -773,3 +773,147 @@ Hi I'm process 24858 and my parent is 24856
 Max = 92
 Min = 11
 Sum = 869
+Hi I'm process 29287 and my parent is 29285
+Hi I'm process 29286 and my parent is 29285
+Hi I'm process 29285 and my parent is 29283
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 29522 and my parent is 29520
+Hi I'm process 29521 and my parent is 29520
+Hi I'm process 29520 and my parent is 29518
+Hi I'm process 29524 and my parent is 29519
+Hi I'm process 29523 and my parent is 29519
+Hi I'm process 29519 and my parent is 29518
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 30046 and my parent is 30044
+Hi I'm process 30044 and my parent is 30042
+Hi I'm process 30045 and my parent is 23591
+Hi I'm process 31303 and my parent is 31301
+Hi I'm process 31302 and my parent is 31301
+Hi I'm process 31301 and my parent is 31299
+Hi I'm process 31305 and my parent is 31300
+Hi I'm process 31304 and my parent is 31300
+Hi I'm process 31300 and my parent is 31299
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 31977 and my parent is 31975
+Hi I'm process 31976 and my parent is 31975
+Hi I'm process 31975 and my parent is 31973
+Hi I'm process 31979 and my parent is 31974
+Hi I'm process 31978 and my parent is 31974
+Hi I'm process 31974 and my parent is 31973
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 32067 and my parent is 32065
+Hi I'm process 32066 and my parent is 32065
+Hi I'm process 32065 and my parent is 32063
+Hi I'm process 32068 and my parent is 32064
+Hi I'm process 32069 and my parent is 32064
+Hi I'm process 32064 and my parent is 32063
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 32159 and my parent is 32157
+Hi I'm process 32158 and my parent is 32157
+Hi I'm process 32157 and my parent is 32155
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 32440 and my parent is 32438
+Hi I'm process 32439 and my parent is 32438
+Hi I'm process 32438 and my parent is 32436
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 32485 and my parent is 32483
+Hi I'm process 32484 and my parent is 32483
+Hi I'm process 32483 and my parent is 32481
+Hi I'm process 32487 and my parent is 32482
+Hi I'm process 32486 and my parent is 32482
+Hi I'm process 32482 and my parent is 32481
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 32751 and my parent is 32749
+Hi I'm process 32750 and my parent is 32749
+Hi I'm process 32749 and my parent is 32747
+Hi I'm process 32753 and my parent is 32748
+Hi I'm process 32752 and my parent is 32748
+Hi I'm process 32748 and my parent is 32747
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 398 and my parent is 396
+Hi I'm process 397 and my parent is 396
+Hi I'm process 396 and my parent is 394
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 465 and my parent is 463
+Hi I'm process 464 and my parent is 463
+Hi I'm process 463 and my parent is 461
+Hi I'm process 467 and my parent is 462
+Hi I'm process 466 and my parent is 462
+Hi I'm process 462 and my parent is 461
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 1742 and my parent is 1740
+Hi I'm process 1741 and my parent is 1740
+Hi I'm process 1740 and my parent is 1738
+Hi I'm process 1744 and my parent is 1739
+Hi I'm process 1743 and my parent is 1739
+Hi I'm process 1739 and my parent is 1738
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 1879 and my parent is 1877
+Hi I'm process 1878 and my parent is 1877
+Hi I'm process 1877 and my parent is 1875
+Hi I'm process 1930 and my parent is 1928
+Hi I'm process 1929 and my parent is 1928
+Hi I'm process 1928 and my parent is 1926
+Hi I'm process 3464 and my parent is 3462
+Hi I'm process 3463 and my parent is 3462
+Hi I'm process 3462 and my parent is 3460
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 3819 and my parent is 3813
+Hi I'm process 3818 and my parent is 3813
+Hi I'm process 3813 and my parent is 3810
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 4376 and my parent is 4374
+Hi I'm process 4375 and my parent is 4374
+Hi I'm process 4374 and my parent is 4372
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 4571 and my parent is 4567
+Hi I'm process 4568 and my parent is 4567
+Hi I'm process 4567 and my parent is 4562
+Max = 92
+Min = 11
+Sum = 869
+Hi I'm process 5110 and my parent is 5108
+Hi I'm process 5109 and my parent is 5108
+Hi I'm process 5108 and my parent is 5106
+Hi I'm process 5112 and my parent is 5107
+Hi I'm process 5111 and my parent is 5107
+Hi I'm process 5107 and my parent is 5106
+Max = 93
+Min = 11
+Sum = 1612
+Hi I'm process 5678 and my parent is 5676
+Hi I'm process 5677 and my parent is 5676
+Hi I'm process 5676 and my parent is 5671
+Max = 92
+Min = 11
+Sum = 869
