@@ -17,7 +17,7 @@ int sig_action_function(int sig, siginfo_t *info, void *ptr)
   union sigval value = info->si_value;
   //printf("Got a signal from %d. Max: %d\n", info->si_pid, (int*) value.sival_ptr);
   if(sig == 41){
-  	printf("Nill is a lil bitch\n");
+ 	final[i] = (int*) value.sival_ptr;
   }
   if(h2[2] > -1)
   {
@@ -98,14 +98,11 @@ int main()
 	wait(NULL);
 	for(int i = 0; i < 2; i++)
 	{ 
-		wait(NULL);
 		pid_t pid = fork();
-		wait(NULL);
 		if(pid ==  0){
 			wait(NULL);
    			//printf ("Hi I'm process %d and my parent is %d.\n", getpid (), getppid ());
    			newFork2(0, 1, data, data_size, data_per_process, i);
-   			wait(NULL);
    			//int maxVal = max_of_array(data_size,data);
    			//value.sival_ptr = maxVal;
    			//sigqueue(getppid(), 40, value);
@@ -113,10 +110,23 @@ int main()
 			
    		}
    		else if(pid > 0){
-   			
+   			wait(NULL);
 
 			printf ("Hi(Main Parent) I'm process %d and my parent is %d.\n", getpid (), getppid ());
-   		
+   			if(i==1)
+   			{
+   				int max1 = final[0];
+   				int min1 = final[1];
+   				int sum1 = final[2];
+
+   				if(max1<h[0])
+   					max1 = h[0];
+   				
+   				if(min1>h[1])
+   					min1 = h[1];
+   				sum1 = sum1+h[2];
+   				printf("Final\nMax: %d\nMin: %d\nSum: %d\n",max1,min1,sum1);
+   			}
     	}
    		else{
    			printf("Fork Failed\n");
@@ -221,9 +231,9 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
    				maxValue.sival_ptr = max1;
    				minValue.sival_ptr = min1;
    				sumValue.sival_ptr = sum1;
-   				sigqueue(getppid(), 40, maxValue);
-   				sigqueue(getppid(), 40, minValue);
-   				sigqueue(getppid(), 40, sumValue);
+   				// sigqueue(getpid(), 40, maxValue);
+   				// sigqueue(getpid(), 40, minValue);
+   				// sigqueue(getpid(), 40, sumValue);
    			}
 		}
 		else if(pid2 == 0)
@@ -231,10 +241,10 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
 			printf ("Hi2 I'm process %d and my parent is %d.\n", getpid (), getppid ());
 			if(counter == 0)
    			{	
-   				int max1 = max_of_array((counter+1)*data_per_process+1,(counter+2)*data_per_process, data);
-   				int min1 =  min_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
-   				int sum1 =  sum_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
-   				printf("Max: %d\n Min: %d\n Sum: %d\n", max1, min1, sum1);
+   				int max1 = max_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
+   				int min1 = min_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
+   				int sum1 = sum_of_array(counter+1*data_per_process+1,(counter+2)*data_per_process, data);
+   				//printf("Max: %d\n Min: %d\n Sum: %d\n", max1, min1, sum1);
    				maxValue.sival_ptr = max1;
    				minValue.sival_ptr = min1;
    				sumValue.sival_ptr = sum1;
@@ -245,7 +255,15 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
    			else if(counter == 1)
    			{	
    			int max1 = max_of_array((counter+3)*data_per_process+1,(counter+4)*data_per_process, data);
-   			printf("Max: %d\n", max1);
+   			int min1 = min_of_array((counter+3)*data_per_process+1,(counter+4)*data_per_process, data);
+   			int sum1 = sum_of_array((counter+3)*data_per_process+1,(counter+4)*data_per_process, data);
+				maxValue.sival_ptr = max1;
+   				minValue.sival_ptr = min1;
+   				sumValue.sival_ptr = sum1;
+   				sigqueue(getppid(), 40, maxValue);
+   				sigqueue(getppid(), 40, minValue);
+   				sigqueue(getppid(), 40, sumValue);
+   			 //printf("Max: %d\n", max1);
    			}
 		}
 		
@@ -257,7 +275,7 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
    			int max1 = max_of_array(counter*data_per_process,(counter+1)*data_per_process, data);
    			int min1 =  min_of_array(counter*data_per_process,(counter+1)*data_per_process, data);
    			int sum1 =  sum_of_array(counter*data_per_process,(counter+1)*data_per_process, data);
-   			printf("Max: %d\n Min: %d\n Sum: %d\n", max1, min1, sum1);
+   			//printf("Max: %d\n Min: %d\n Sum: %d\n", max1, min1, sum1);
    			maxValue.sival_ptr = max1;
    			minValue.sival_ptr = min1;
    			sumValue.sival_ptr = sum1;
@@ -268,7 +286,14 @@ void newFork2(int32_t i, int32_t n, int32_t data[], int32_t data_size, int data_
       	else if(counter == 1)
    		{	
    			int max1 = max_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
-   			printf("Max: %d\n", max1);
+ 			int min1 = min_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
+   			int sum1 = sum_of_array((counter+2)*data_per_process+1,(counter+3)*data_per_process, data);
+   			maxValue.sival_ptr = max1;
+   			minValue.sival_ptr = min1;
+   			sumValue.sival_ptr = sum1;
+   			sigqueue(getppid(), 40, maxValue);
+   			sigqueue(getppid(), 40, minValue);
+   			sigqueue(getppid(), 40, sumValue);
    		}
    		
 
