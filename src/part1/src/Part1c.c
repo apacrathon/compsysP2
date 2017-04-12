@@ -8,18 +8,23 @@
 
 int h[3]; 
 int h2[3];
-//int final[3]; 
 int i =0;
+int terminatedpid;
 //signal handler
 int sig_action_function(int sig, siginfo_t *info, void *ptr)
 {
   
+  if(sig == SIGINT)
+  {
+
+    printf("\nProcess %d confirms CTRL-C interrupt and will now terminate \n",getpid());
+    terminatedpid = getpid();
+      exit(0);
+  }
+  else if(sig == 40)
+{
   union sigval value = info->si_value;
-  //printf("Got a signal from %d. Max: %d\n", info->si_pid, (int*) value.sival_ptr);
-   // if(sig == 41){
-   //  final[i] = (int*) value.sival_ptr;
-   //  printf("final: %d\n",final[i]);
-   // }
+
  if(h2[2] > -1)
   {
     for(int i = 0; i < 3; i++)
@@ -41,6 +46,7 @@ int sig_action_function(int sig, siginfo_t *info, void *ptr)
   {
     i = 0;
   }
+}
 }
 
 int max_function(int array[], int first, int last)
@@ -186,13 +192,20 @@ if (f == NULL)
     
                    
         //write final results to parent
+        if(getppid() != 1)
+        {
         maxValue.sival_ptr =(int*) maxd;
         minValue.sival_ptr =(int*) mind;
         sumValue.sival_ptr =(int*) sumd;
         sigqueue(getppid(), 40, maxValue);
         sigqueue(getppid(), 40, minValue);
         sigqueue(getppid(), 40, sumValue);
-
+        }
+        else if(getppid() == 1)
+        {
+            printf("My parent %d is terminated, I will terminate now too\n",getppid());
+            exit(0);
+        }
     }
     //child 2
     else if(getpid()==child[1])
@@ -220,49 +233,68 @@ if (f == NULL)
         if(mind>h2[1])
             mind = h2[1];
         sumd = sumd + h2[2];
+        if(getppid() != 1){
         maxValue.sival_ptr =(int*) maxd;
         minValue.sival_ptr =(int*) mind;
         sumValue.sival_ptr =(int*) sumd;
         sigqueue(getppid(), 40, maxValue);
         sigqueue(getppid(), 40, minValue);
         sigqueue(getppid(), 40, sumValue);
+        }
+        
     }
     //child 3
     else if (getpid()==child[2])
     {
+        signal(SIGINT, SIG_IGN);
+        printf("press Ctrl-C! 5 Seconds Remaining\n");
+        sleep(5);
         
-        printf("Hi3 I'm process %d and my parent is %d\n",getpid(),getppid());
-        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
         maxd = max_function(array,2*gap+1, 3*gap);
         mind = min_function(array,2*gap+1, 3*gap);
         sumd = sum_function(array,2*gap+1, 3*gap);
         //write results to child 1
+        if(getppid() == child[0]){
+        printf("Hi3 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());   
         maxValue.sival_ptr = (int*) maxd;
         minValue.sival_ptr = (int*) mind;
         sumValue.sival_ptr = (int*) sumd;
         sigqueue(getppid(), 40, maxValue);
         sigqueue(getppid(), 40, minValue);
         sigqueue(getppid(), 40, sumValue);
-
-        
+        }
+        else
+        {
+            printf("Hi I'm process %d and My parent %d is dead, I will now terminate\n",getpid(),child[0]);
+            exit(0);
+        }
     }
     //child 4
     else if (getpid()==child[3])
     {
+        signal(SIGINT, SIG_IGN);
+        sleep(5);   
         
-        printf("Hi4 I'm process %d and my parent is %d\n",getpid(),getppid());
-        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
         maxd = max_function(array,3*gap+1,4*gap);
         mind = min_function(array,3*gap+1,4*gap);
         sumd = sum_function(array,3*gap+1,4*gap);
         //write results to child 1
-
+        if(getppid() == child[0]){
+        printf("Hi4 I'm process %d and my parent is %d\n",getpid(),getppid());
+        fprintf(f,"Hi I'm process %d and my parent is %d\n",getpid(),getppid());
         maxValue.sival_ptr = (int*) maxd;
         minValue.sival_ptr = (int*) mind;
         sumValue.sival_ptr = (int*) sumd;
         sigqueue(getppid(), 40, maxValue);
         sigqueue(getppid(), 40, minValue);
         sigqueue(getppid(), 40, sumValue);
+        }
+        else
+        {
+            printf("Hi I'm process %d and My parent %d is dead, I will now terminate\n",getpid(),child[0]);
+            exit(0);
+        }
     }
     //child 5
     else if (getpid()==child[4])
@@ -273,12 +305,19 @@ if (f == NULL)
         mind = min_function(array,4*gap+1,5*gap);
         sumd = sum_function(array,4*gap+1,5*gap);
         //write results to child 2
+        if(getppid() != 1){
         maxValue.sival_ptr = (int*) maxd;
         minValue.sival_ptr = (int*) mind;
         sumValue.sival_ptr = (int*) sumd;
         sigqueue(getppid(), 40, maxValue);
         sigqueue(getppid(), 40, minValue);
         sigqueue(getppid(), 40, sumValue);
+        }
+        else if(getppid() == 1)
+        {
+            printf("My parent %d is terminated, I will terminate now too\n",getppid());
+            exit(0);
+        }   
     }
     //child 6
     else if (getpid()==child[5])
@@ -289,22 +328,31 @@ if (f == NULL)
         mind = min_function(array,5*gap+1,end);
         sumd = sum_function(array,5*gap+1,end);
         //write results to child 2
+        if(getppid != 1){
         maxValue.sival_ptr = (int*) maxd;
         minValue.sival_ptr = (int*) mind;
         sumValue.sival_ptr = (int*) sumd;
         sigqueue(getppid(), 40, maxValue);
         sigqueue(getppid(), 40, minValue);
         sigqueue(getppid(), 40, sumValue);
+        }
+        else if(getppid() == 1)
+        {
+            printf("My parent %d is terminated, I will terminate now too\n",getppid());
+            exit(0);
+        }
     }
     //Parent
     else
     {
 //waits for children
+signal(SIGINT, SIG_IGN);
     for (int child=0; child<4;child++)
     {
         int status;
         pid_t pid=wait(&status);
     }   
+sleep(6);
 printf("hello im main parent %d\n",getpid());
 int max1;
 int min1;
@@ -322,10 +370,10 @@ fprintf(f,"Max = %d\n",max1);
 
 
 //compute new min
-if(h[1]<h2[1])
+if(h[1]<h2[1] && h[1] != -1)
     min1 = h[1];
-else 
-    min1 = h2[1];
+else if(h2[1] == -1)
+    min1 = h[1];
 //display min
 printf("Min = %d\n",min1);
 fprintf(f,"Min = %d\n",min1);
@@ -371,6 +419,7 @@ while(fscanf(num, "%d,", &readnums) > 0 )
 }
 fclose(num);
 //run process
+signal(SIGINT,sig_action_function);
 partd(array,0,index-1);
 
 return 0;
