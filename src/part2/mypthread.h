@@ -8,15 +8,14 @@
 #include <stdint.h>
 
 //struct threadNode; //defined in .c class
-enum QUEUE_STATUS { RUNNING, IDLE, TERMINATED, BLOCKED, FAILURE, FINISHED };
+enum QUEUE_STATUS { RUNNING, IDLE, TERMINATED, BLOCKED, FAILURE };
 
 typedef struct RNPNode_t
 {
-    /** Ready queue ID **/
-    uint16_t ready_id;
+    uint32_t internal_tid;
     uint64_t exec_time;
     ucontext_t ucontext;
-    struct RNPNode_t * next;
+    struct mypthread_t * next;
     enum QUEUE_STATUS tstate;
 } RNPNode_t;
 
@@ -25,6 +24,7 @@ typedef struct mypthread_t
     //External thread ID
     uint16_t tid;
     RNPNode_t node;
+    void * retval;
 } mypthread_t;
 
 typedef struct {
