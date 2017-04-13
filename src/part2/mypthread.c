@@ -9,52 +9,20 @@
 #include "time.h"
 
 #define STACK_SIZE (1024 * 256)
-#define MAX_THREADS 5
-#define TIME_QUANTUM 0.0002
+#define TIME_QUANTUM 1
+
+/** Global variables **/
 
 typedef struct
 {
     struct mypthread_t * head; //* current;
     uint64_t time_quantum;
     uint32_t num_threads, terminated_threads;
-    ucontext_t mctx;
 } ready_queue;
 
-/** Global variables **/
+static ucontext_t mctx;
 bool scheduler_init = false;
 ready_queue mypthread_scheduler;
-
-// Type your own functions (void)
-// e.g., free up sets of data structures created in your library
-
-void mypthread_set_status(mypthread_t *thread, enum QUEUE_STATUS state) { thread->node.tstate = state; }
-
-void timer_handler (int signum)
-{
-    mypthread_yield();
-}
-
-void mypthread_scheduler_init()
-{
-    struct sigaction sa;
-    struct itimerval timer;
-
-    /* Install timer_handler as the signal handler for SIGVTALRM. */
-    memset(&sa, 0, sizeof (sa));
-    sa.sa_handler = &timer_handler;
-    sigaction(SIGVTALRM, &sa, NULL);
-
-    /* Configure the timer to expire after 250 msec... */
-    timer.it_value.tv_sec = 1;
-    timer.it_value.tv_usec = 0;
-    /* ... and every 250 msec after that. */
-    timer.it_interval.tv_sec = 1;
-    timer.it_interval.tv_usec = 0;
-    /* Start a virtual timer. It counts down whenever this process is
-    executing. */
-    setitimer(ITIMER_VIRTUAL, &timer, NULL);
-    for(;;);
-}
 
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*start_routine) (void *), void *arg)
 {
@@ -69,7 +37,7 @@ int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*
         exit(EXIT_FAILURE);
     }
     
-    thread->node.ucontext.uc_link = &mypthread_scheduler.mctx;
+    thread->node.ucontext.uc_link = 0;
     thread->node.ucontext.uc_stack.ss_sp = malloc(STACK_SIZE);
     thread->node.ucontext.uc_stack.ss_size = STACK_SIZE;
     thread->node.ucontext.uc_stack.ss_flags = 0;
@@ -77,7 +45,7 @@ int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*
     /** Determine if there are any arguments. Pthreads only take one argument.s**/
     if (arg != NULL) { num_args = 1; } else { num_args = 0; }
 
-    printf("mypthread_create: creating thread with tid = %d\n", thread->tid);
+    //printf("mypthread_create: creating thread with external tid = %d\n", thread->tid);
     errno = 0;
     makecontext(&thread->node.ucontext, (void(*)(void))start_routine, num_args, arg);
     if (errno) 
@@ -88,31 +56,95 @@ int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*
     }
 
     /** Add thread to scheduler **/
-     /** Check if the scheduler is running **/
     if (!scheduler_init)
     {
-        getcontext(&mypthread_scheduler.mctx);
-        if (scheduler_init) { return 0; }
+        /** Allocate memory to keep track of the main context thread **/
         mypthread_scheduler.head = malloc(sizeof(mypthread_t));
         mypthread_scheduler.head->node.next = mypthread_scheduler.head;
         mypthread_scheduler.head->node.internal_tid = 0;
         mypthread_scheduler.head->node.tstate = RUNNING;
-        mypthread_scheduler.head->node.ucontext = mypthread_scheduler.mctx;
-        mypthread_scheduler.num_threads++;
+        mypthread_scheduler.head->node.ucontext = mctx;
+        
+        /** The scheduler is now aware of one thread running **/
+        mypthread_scheduler.num_threads = 1;
         mypthread_scheduler.terminated_threads = 0;
 
-        mypthread_scheduler.time_quantum = TIME_QUANTUM;
+        /** NULLED Round Robin scheduling **/
+        //mypthread_scheduler.time_quantum = TIME_QUANTUM;
+        //myptrhead_scheduler_init;
+
+        /** Make thread ready to execute and add to scheduling queue **/
         mypthread_set_status(thread, IDLE);
         mypthread_scheduler_push(thread);
         scheduler_init = true;
-        mypthread_scheduler_init();
     }
-    else
+    else //if (mypthread_scheduler.num_threads >= 2)
     {
+        /** Make thread ready to execute and add to scheduling queue **/
         mypthread_scheduler_push(thread);
         mypthread_set_status(thread, IDLE);
-        mypthread_scheduler_init();
     }
+    // Remove for Round Robin algo.
+    mypthread_yield();
+    return 0;
+}
+
+void mypthread_exit(void *retval)
+{
+    mypthread_scheduler.head->retval = retval;
+    mypthread_scheduler.head->node.tstate = TERMINATED;
+    mypthread_scheduler.terminated_threads++;
+    mypthread_yield();
+}
+
+int mypthread_yield(void)
+{
+    mypthread_t * current = mypthread_scheduler.head;
+    mypthread_t * next = mypthread_scheduler.head->node.next;
+
+    /** Get the next thread in the 'queue' that isn't terminated **/
+    while (next->node.tstate == TERMINATED) 
+    {
+        //if (next->node.internal_tid == current->node.internal_tid) { printf("true"); return TERMINATED;}
+        next = next->node.next;
+    }
+    
+    if (next->node.internal_tid == current->node.internal_tid) 
+    {
+        current->node.tstate = TERMINATED; 
+        return TERMINATED;
+    }
+
+    switch (next->node.tstate)
+    {
+        case RUNNING:
+            /** shouldn't come to this point, but now we'll know during debugging **/
+            return RUNNING;
+        case TERMINATED:
+            /* cleanup thread */
+            return TERMINATED;
+        case BLOCKED:
+            /* Blocked and Idle threads just continue execution on yield */
+        case IDLE:
+            /* Move 'next' thread to the first position, & insert the previous one in the back of the scheduler */
+            mypthread_scheduler.head = next;
+            mypthread_scheduler.head->node.tstate = RUNNING;
+            if (current->node.tstate != TERMINATED) 
+            {
+                if (current->node.tstate == RUNNING) { current->node.tstate = BLOCKED; }
+                else { current->node.tstate = IDLE; } 
+            }
+            break;
+    }
+
+    mypthread_t * curr = mypthread_scheduler.head;
+    return swapcontext(&current->node.ucontext, &next->node.ucontext);    
+}
+
+int mypthread_join(mypthread_t thread, void **retval)
+{
+    while (thread.node.tstate != TERMINATED && mypthread_yield() == TERMINATED);
+    thread.retval = retval;
     return 0;
 }
 
@@ -128,90 +160,36 @@ void mypthread_scheduler_push(mypthread_t * thread)
     tail->node.next = thread;
     tail->node.next->node.internal_tid = i;
     mypthread_scheduler.num_threads++;
-}
 
-void mypthread_exit(void *retval)
-{
-    mypthread_scheduler.head->retval = retval;
-    mypthread_scheduler.head->node.tstate = TERMINATED;
-    mypthread_scheduler.terminated_threads++;
-    //printf("mypthread_exit: thread (%d), state(%d)\n\n", mypthread_scheduler.head->node.internal_tid, mypthread_scheduler.head->node.tstate);
-}
-
-int mypthread_yield(void)
-{
-    mypthread_t * current = mypthread_scheduler.head;
-    mypthread_t * next = mypthread_scheduler.head->node.next;
-
-    if (mypthread_scheduler.num_threads - mypthread_scheduler.terminated_threads < 1) { return 0; }
-
-    /** Get the next thread in the 'queue' that isn't terminated **/
-    while (next->node.tstate == TERMINATED) { next = next->node.next; }
-
-    switch (next->node.tstate)
-    {
-        case RUNNING:
-            /* error */
-            return;
-        case TERMINATED:
-            /* cleanup thread */
-            printf("I am thread %d, and i'm terminating\n", next->node.internal_tid);
-            return;
-        case BLOCKED:
-            /* new thread */
-        case IDLE:
-            /* middle of execution */
-            mypthread_scheduler.head = next;
-            mypthread_scheduler.head->node.tstate = RUNNING;
-            //next->node.tstate = RUNNING;
-            if (current->node.tstate != TERMINATED) { current->node.tstate = IDLE; }
-            break;
-    }
-    
     mypthread_t * curr = mypthread_scheduler.head;
-    for (int i = 0; i < mypthread_scheduler.num_threads; i++)
+        for (int i = 0; i < mypthread_scheduler.num_threads; i++)
     {
-        printf("swap thread_list: tid = %d, state = %d\n", curr->node.internal_tid, curr->node.tstate);
+        //printf("swap thread_list: tid = %d, state = %d\n", curr->node.internal_tid, curr->node.tstate);
         curr = curr->node.next;
     }
-    printf("mypthread_yield: swapping from thread %d to thread %d\n", current->node.internal_tid, next->node.internal_tid);
-    
-    return swapcontext(&current->node.ucontext, &next->node.ucontext);    
 }
 
-int mypthread_join(mypthread_t thread, void **retval)
-{
+void mypthread_set_status(mypthread_t *thread, enum QUEUE_STATUS state) { thread->node.tstate = state; }
 
+/** The following functions were for my own implementation of a Round Robin algorithm,
+  * however, the mtsort driver has it's own yielding implemented, therefore,
+  * I nulled the functionality of my custom scheduler. Explanation in report **/
+void timer(int signum) { mypthread_yield(); }
+
+void mypthread_scheduler_init()
+{
+    struct sigaction sa;
+    struct itimerval thread_timer;
+
+    memset(&sa, 0, sizeof (sa));
+    sa.sa_handler = &timer;
+    sigaction(SIGVTALRM, &sa, NULL);
+
+    thread_timer.it_value.tv_sec = TIME_QUANTUM;
+    thread_timer.it_value.tv_usec = 0;
+    thread_timer.it_interval.tv_sec = TIME_QUANTUM;
+    thread_timer.it_interval.tv_usec = 0;
+
+    setitimer(ITIMER_VIRTUAL, &thread_timer, NULL);
+    for(;;);
 }
-
-void *helloworld(void *args)
-{
-    char *msg = (char*)args;
-    printf("helloworld: (thread routine), with message: %s\n", msg);
-    mypthread_exit(0);
-}
-
-/*int main()
-{
-    mypthread_t thread;
-    mypthread_attr_t thread1_attr;
-
-    printf("RUNNING = %d, IDLE = %d, TERMINATED = %d, BLOCKED = %d, FAILURE = %d\n\n", RUNNING, IDLE, TERMINATED, BLOCKED, FAILURE);
-
-
-    char *message = "fuck OS";
-
-
-    for( int i = 0; i < 4; i++ )
-    {
-        thread.tid = i;
-        if ( mypthread_create(&thread, 0, helloworld, (void*)message) != 0 )
-        {
-            printf( "[FATAL] Could not create thread: %d\n", i );
-            exit( 1 );
-        }
-    }
-}*/
-
-/* Write whatever function is left here ....
-  void mypthread_whatever (... ) ...*/

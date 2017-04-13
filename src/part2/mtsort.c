@@ -74,7 +74,6 @@ void *fnsort( void *arg )
 
 void * fncheck( void *arg )
 {
-    printf("fncheck\n");
     struct pthrarg *pargs;
     int i, j = 0, size, check;
     mypthread_mutex_t *mtx;
